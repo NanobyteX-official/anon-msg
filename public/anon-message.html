@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Send an Anonymous Message</title>
+	<link id="colorCSS" rel="stylesheet" href="color.css">
+	<link id="bwCSS" rel="stylesheet" href="black-white.css" disabled>
+</head>
+<body>
+	<h2>Send an Anonymous Message</h2>
+	<form id="anonForm">
+		<textarea id="message" placeholder="Type your anonymous message..." required></textarea>
+		<br>
+		<button type="submit">Send Message</button>
+	</form>
+
+	<div id="successModal" class="modal">
+		<div class="modal-content">
+			<h2>Message Sent Successfully!</h2>
+			<p>Your message is being sent to WhatsApp...</p>
+		</div>
+	</div>
+
+	<div id="encryptionModal" class="encryption-modal">
+		<p>Encrypted with <b>NanoV-47E Titan&trade;</b></p>
+	</div>
+
+	<script>
+		document.getElementById("anonForm").addEventListener("submit", function(event) {
+			event.preventDefault();
+
+			const message = document.getElementById("message").value.trim();
+
+			if(message === "") return;
+
+			sessionStorage.setItem("anonMessage", message);
+
+			//showing success modal
+			document.getElementById("successModal").style.display = "flex";
+
+			setTimeout(() => {
+				window.location.href="confirmation-msg.html";
+			}, 2000);
+		});
+
+		window.onload = function() {
+			setTimeout(() => {
+				document.getElementById("encryptionModal").classList.add("hidden");
+
+				const elementsToFade = document.querySelectorAll("h2, textarea, button, footer, hr, p");
+
+				elementsToFade.forEach(el => {
+					el.style.transition = "filter 2s ease-in-out";
+					el.style.filter = "grayscale(100%)";
+				});
+
+				setTimeout(() => {
+					document.getElementById("colorCSS").disabled = true;
+					document.getElementById("bwCSS").disabled = false;
+
+					elementsToFade.forEach(el => {
+						el.style.filter = "none";
+					});
+				}, 2000);	
+			}, 2000);
+		};
+	</script>
+
+	<footer>
+		<p>&copy; 2025 NanoCraft Inc. All rights reserved!</p>
+		<hr>
+		<p>Powered by NanobyteX&trade;</p>
+	</footer>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Redirecting...</title>
+	<style>
+		body{
+			font-family: Arial, sans-serif;
+			text-align: center;
+			padding: 50px;
+			justify-content: center;
+		}
+
+		strong{
+			color: green;
+		}
+
+		#dots{
+			color: green;
+		}
+
+		.icon-container{
+			width: 90vh auto;
+			height: 90px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			animation: transformIcon 3s ease-in-out forwards;
+		}
+
+		.icon{
+			width: 100%;
+			height: 100%;
+			overflow: visible;
+		}
+
+		.padlock{
+			stroke-dasharray: 200;
+			stroke-dashoffset: 200;
+			animation: drawPadlock 2.0s forwards, lockIn 2.0s forwards;
+		}
+
+		.lock-body{
+			animation: lockGlow  2s forwards;
+		}
+
+		.keyhole{
+			opacity: 0;
+			animation: keyholeFlash 0.5s 1.8s forwards;
+		}
+
+		@keyframes drawPadlock{
+			to{
+				stroke-dashoffset: 0;
+			}
+		}
+
+		@keyframes lockIn{
+			0%{ transform:translateY(-10px); }
+			100%{ transform:translateY(0px); }
+		}
+
+		@keyframes lockGlow{
+			0%, 100%{ filter: drop-shadow(0px 0px 8px darkgrey); }
+			25%{ filter: drop-shadow(0px 0px 10px darkgrey); }
+			50%{ filter: drop-shadow(0px 0px 15px grey); }
+			75%{ filter: drop-shadow(0px 0px 25px limegreen); }
+			100%{ filter: drop-shadow(0px 0px 20px green); }
+		}
+
+		@keyframes keyholeFlash{
+			0%{ opacity:0; }
+			50%{ opacity:1; }
+			100%{ opacity: 1; }
+		}
+
+		.bottom-text{
+			position: fixed;
+			bottom: 130px;
+			left: 0;
+			right: 0;
+			width: 100%;
+			text-align: center;
+			padding: 10px 0;
+		}
+
+		footer{
+			background-color: #fff;
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			padding: 20px 0;
+			text-align: center;
+			border-radius: 8px;
+			border: 1px solid #000;
+		}
+
+		hr{
+			border: 1px solid #000;
+			background-color: #000;
+			width: 50%;
+		}
+
+		footer p{
+			font-size: 16px;
+			color: #000;
+		}
+	</style>
+</head>
+<body>
+	<h2>Redirecting to <strong>WhatsApp</strong><span id="dots">...</span></h2>
+	<p>Your message is being sent anonymously</p>
+
+	<div class="icon-container">
+		<svg class="icon" viewBox="0 0 100 100">
+			<defs>
+				<filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+					<feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+					<feMerge>
+						<feMergeNode in="coloredBlur"/>
+						<feMergeNode in="SourceGraphic"/>
+					</feMerge>
+				</filter>
+			</defs>
+			<!--<path class="padlock" d="M30 40 V25 A20 20 0 0 1 70 25 V40 M25 40 H75 V80 H25 Z" fill="none" stroke="black"stroke-width="5" stroke-linecap="round"/>-->
+			<path class="padlock" d="M30 40 V25 A20 20 0 0 1 70 25 V40" fill="none" stroke="green" stroke-width="6" stroke-linecap="round"/>
+			<rect class="lock-body" x="25" y="40" width="50" height="50" rx="5" fill="white" stroke="black" stroke-width="3" filter="url(#glow)"/>
+			<circle class="keyhole" cx="50" cy="60" r="5" fill="black"/>
+		</svg>
+	</div>
+
+	<script>
+		const dots = document.getElementById("dots");
+		let dotCount = 0;
+
+		setInterval(() => {
+			dotCount = (dotCount + 1) % 4;
+			dots.textContent = ".".repeat(dotCount);
+		}, 1000);
+
+		const message = sessionStorage.getItem("anonMessage");
+
+		if(message) {
+			const phone = "233551968242";
+			const encodedMessage = encodeURIComponent(message);
+			const isMobile = /iPhone|Android|iPad/i.test(navigator.userAgent);
+			const whatsappURL = isMobile? `https://wa.me/${phone}?text=${encodedMessage}`: `https://web.whatsapp.com/send?phone=${phone}&text=${encodedMessage}`;
+
+			setTimeout(() => {
+				window.location.href = whatsappURL;
+
+				sessionStorage.removeItem("anonMessage");
+			}, 3000);
+		}
+	</script>
+
+	<p class="bottom-text">Secured with <b>NanoV-47E Titan&trade;</b>, supported by <strong>WhatsApp&reg;</strong></p>
+
+	<footer>
+		<p>&copy; 2025 NanoCraft Inc. All rights reserved!</p>
+		<hr>
+		<p>Powered by NanobyteX&trade;</p>
+	</footer>
+</body>
+</html>
